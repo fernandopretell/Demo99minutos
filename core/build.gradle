@@ -1,0 +1,82 @@
+import com.fulbiopretell.demo99minutos.Config
+import com.fulbiopretell.demo99minutos.Deps
+import com.fulbiopretell.demo99minutos.Versions
+
+plugins {
+    id("com.android.library")
+    id("kotlin-android")
+    id("kotlin-android-extensions")
+    id("kotlin-kapt")
+}
+
+android {
+    compileSdkVersion Versions.Android.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion Versions.Android.minSdkVersion
+        targetSdkVersion Versions.Android.targetSdkVersion
+    }
+
+    buildTypes {
+
+        debug{
+            minifyEnabled false
+        }
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        develop {
+            initWith debug
+        }
+    }
+
+    variantFilter { variant ->
+        if (variant.buildType.name == "debug")
+            setIgnore(true)
+    }
+
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+        test.java.srcDirs += "src/test/kotlin"
+        androidTest.java.srcDirs += "src/androidTest/kotlin"
+    }
+
+    packagingOptions {
+        excludes -= Config.Packaging.excludes
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    api Deps.kotlin
+    api Deps.Android.appCompat
+    api Deps.Android.androidKTX
+    api Deps.Android.constraintLayout
+    api Deps.Android.material
+    api Deps.Libs.gson
+    api Deps.Libs.dynamicanimation
+
+
+    api Deps.Libs.glide
+    kapt Deps.Libs.glideCompiler
+    api Deps.Libs.glideOkHttp3
+
+    api Deps.Android.work
+
+    testImplementation Deps.Test.junit
+}

@@ -1,0 +1,73 @@
+import com.fulbiopretell.demo99minutos.Versions
+import com.fulbiopretell.demo99minutos.Deps
+import com.fulbiopretell.demo99minutos.Config
+
+plugins {
+    id("com.android.library")
+    id("kotlin-android")
+    id("kotlin-android-extensions")
+    id("kotlin-kapt")
+}
+
+android {
+    compileSdkVersion Versions.Android.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion Versions.Android.minSdkVersion
+        targetSdkVersion Versions.Android.targetSdkVersion
+    }
+
+    buildTypes {
+
+        debug{
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        develop {
+            initWith debug
+        }
+    }
+
+    viewBinding {
+        enabled = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    api project(':core')
+    //api project(':base')
+
+    implementation Deps.kotlin
+    implementation Deps.kotlinCoroutines
+    implementation Deps.kotlinCoroutinesAndroid
+
+    implementation Deps.Android.appCompat
+    implementation Deps.Android.androidKTX
+    implementation Deps.Android.constraintLayout
+    implementation Deps.Android.material
+
+    testImplementation Deps.Test.junit
+    testImplementation Deps.Test.koinTest
+    testImplementation Deps.Test.kluent
+    testImplementation Deps.Test.mockk
+    testImplementation Deps.Test.androidTestCore
+    testImplementation Deps.Test.androidTestExt
+    testImplementation Deps.Test.roboelectric
+    testImplementation Deps.Test.roboelectricMulidex
+
+    implementation 'com.airbnb.android:lottie:3.5.0'
+}
